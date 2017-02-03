@@ -10,9 +10,6 @@
 import os, requests, sys, shutil
 
 class Datagrabber():
-    
-    """ Testing how forking, editing and pull requesting works """
-    
     def __init__(self,source):
                 
         #image and text lists to be populated
@@ -20,6 +17,7 @@ class Datagrabber():
         self.text_list = []
                 
         self.getimages(source)
+        self.gettext()
     
     def getdata_lists(self):
         return (self.image_list,self.text_list)
@@ -69,6 +67,14 @@ class Datagrabber():
             
     def __local(self):
         self.info = "to be done"
+    
+    def gettext(self):
+        try:
+            with open("quotes.txt") as self.f:
+                self.text_list = self.text_list + self.f.readlines()
+        except Exception:
+            print("failed to load quotes.txt")
+            
     
 #source="flickr"
 #mydatagrabber = Datagrabber(source)
