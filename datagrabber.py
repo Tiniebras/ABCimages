@@ -10,6 +10,9 @@
 import os, requests, sys, shutil
 
 class Datagrabber():
+    
+    """ Testing how forking, editing and pull requesting works """
+    
     def __init__(self,source):
                 
         #image and text lists to be populated
