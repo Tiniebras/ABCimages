@@ -49,7 +49,7 @@ class Datagrabber():
         self.urls = {}
          
         for photo in self.r.json()["photoset"]["photo"]:
-          self.urls[photo["id"]] = "https://farm{farm}.staticflickr.com/{server}/{id}_{secret}.jpg".\
+          self.urls[photo["id"]] = "https://farm{farm}.staticflickr.com/{server}/{id}_{secret}_b.jpg".\
           format(**photo) # Info on Flickr URLs: https://www.flickr.com/services/api/misc.urls.html
          
         #urlkeys is a dict_keys object so must be type cast to a list
