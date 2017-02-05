@@ -6,24 +6,30 @@ from PIL import Image, ImageDraw, ImageFont # Install Pillow, not PIL
 
 class Imagegenerator():
      def __init__(self,data_list, user_preferences):
+          
+          self.overlayimage_list(data_list, user_preferences)
+     
+     def overlayimage_list(self,data_list,user_preferences):
           self.image_list, self.text_list=data_list
           self.user_preferences=user_preferences
           
-          self.original_image = Image.open(self.image_list[0]+".jpg").convert("RGBA")
+          for i in range(len(self.text_list)):
+               self.overlayimage(self.image_list[i],self.text_list[i], 1 )
+     
+     def overlayimage(self,image, text,user_preference):
+          self.myimage = image
+          self.mytext = text
+          
+          self.original_image = Image.open( self.myimage + ".jpg").convert("RGBA")
           self.x, self.y, self.font_size, self.max_width = 10, 10, 24, self.original_image.size[0] - 20
           self.text_placeholder = Image.new("RGBA", self.original_image.size, (255,255,255,0))
           self.font = ImageFont.truetype("OpenSans-Bold.ttf", self.font_size)
-          self.d = ImageDraw.Draw(self.text_placeholder)
-          
-          self.overlaytext(data_list, user_preferences)
-     
-     def overlaytext(self,data_list,user_preferences):
-          self.image_list, self.text_list=data_list
-          self.user_preferences=user_preferences
+          self.d = ImageDraw.Draw(self.text_placeholder)          
           
           self.line = ""
           self.lines = []
-          self.words = self.text_list[0].split() # Split by whitespace
+          
+          self.words = self.mytext.split() # Split by whitespace
           for word in self.words:
               if len(self.line.split()) == 0:
                   self.line = word
@@ -41,5 +47,5 @@ class Imagegenerator():
               self.d.text((self.x, self.y + (i * self.line["height"])), self.line["string"], font = self.font, fill = (255,255,255,128)) # To justify right, would set x to original_image.size[0] - line["width"]
           
           self.out = Image.alpha_composite(self.original_image, self.text_placeholder)
-          self.out.save(self.image_list[0]+".edit.jpg")          
+          self.out.save(self.myimage+".edit.jpg")          
     
