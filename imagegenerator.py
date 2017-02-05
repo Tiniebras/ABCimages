@@ -37,9 +37,8 @@ class Imagegenerator():
                   self.line = "{} {}".format(self.line, word)
               self.line_width, self.line_height = self.d.textsize(self.line, font = self.font)
               if self.line_width > self.max_width:
-                  self.last_word = self.line.rsplit(" ", 1)[-1]
                   self.lines.append({"width": self.line_width, "height": self.line_height, "string": self.line.rsplit(" ", 1)[0]})
-                  self.line = self.last_word
+                  self.line = self.line.rsplit(" ", 1)[-1]
           self.lines.append({"width": self.line_width, "height": self.line_height, "string": self.line}) # Catch the last line
           # ...end method (would return lines dict) #
           
