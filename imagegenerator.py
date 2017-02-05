@@ -43,7 +43,6 @@ class Imagegenerator():
           self.lines.append({"width": self.line_width, "height": self.line_height, "string": self.line}) # Catch the last line
           
           for i, self.line in enumerate(self.lines):
-              print(self.line["height"], self.line["string"])
               self.d.text((self.x, self.y + (i * self.lines[i-1]["height"])), self.line["string"], font = self.font, fill = (255,255,255,128)) # To justify right, would set x to original_image.size[0] - line["width"]
           
           self.out = Image.alpha_composite(self.original_image, self.text_placeholder)
