@@ -56,10 +56,10 @@ class Datagrabber():
         self.image_list = self.image_list + list(self.urls.keys())
         
         for id, url in self.urls.items():
-            if not os.path.isfile(id + ".jpg"):
+            if not os.path.isfile(os.path.join("photos", id + ".jpg")):
                 try:
                     self.r = requests.get(url, stream = True)
-                    with open("{}.jpg".format(id), "wb") as out_file:
+                    with open(os.path.join("photos", "{}.jpg".format(id)), "wb") as out_file:
                         shutil.copyfileobj(self.r.raw, out_file)
                     del self.r
                     print("Downloaded {}.jpg".format(id))

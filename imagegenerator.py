@@ -26,7 +26,7 @@ class Imagegenerator():
         self.myimage = image
         self.mytext = text
         self.font_size = user_preferences["font_size"]
-        self.original_image = Image.open(self.myimage + ".jpg").convert("RGBA")
+        self.original_image = Image.open(os.path.join("photos", self.myimage + ".jpg")).convert("RGBA")
         self.x, self.y, self.font_size, self.max_width = 10, 10, self.font_size, self.original_image.size[0] - 20
         self.text_placeholder = Image.new("RGBA", self.original_image.size, (255,255,255,0))
         self.font = ImageFont.truetype(self.font_file, self.font_size)
@@ -50,4 +50,4 @@ class Imagegenerator():
             self.d.text((self.x, self.y + (i * self.lines[i-1]["height"])), self.line["string"], font = self.font, fill = (255,255,255,128)) # To justify right, would set x to original_image.size[0] - line["width"]
 
         self.out = Image.alpha_composite(self.original_image, self.text_placeholder)
-        self.out.save(self.myimage+".edit.jpg")
+        self.out.save(os.path.join("photos", self.myimage+".edit.jpg"))
