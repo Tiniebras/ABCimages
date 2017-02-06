@@ -16,14 +16,16 @@ class Imagegenerator():
         random.shuffle(self.font_file_list)
 
         for i in range(len(self.text_list)):
-            self.font_file = self.font_file_list[i % len(self.font_file_list)]
+            if user_preferences["font"] == "random":
+                self.font_file = self.font_file_list[i % len(self.font_file_list)]
+            else:
+                self.font_file = os.path.join("fonts", user_preferences["font"])
             self.overlayimage(self.image_list[i], self.text_list[i], self.user_preferences, self.font_file)
      
     def overlayimage(self, image, text, user_preferences, font_file):
         self.myimage = image
         self.mytext = text
         self.font_size = user_preferences["font_size"]
-        #self.font_file = self.font_list[random.randint(0, len(self.font_list) - 1)]
         self.original_image = Image.open(self.myimage + ".jpg").convert("RGBA")
         self.x, self.y, self.font_size, self.max_width = 10, 10, self.font_size, self.original_image.size[0] - 20
         self.text_placeholder = Image.new("RGBA", self.original_image.size, (255,255,255,0))
