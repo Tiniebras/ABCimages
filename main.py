@@ -9,7 +9,7 @@ import datagrabber
 
 #User input module to set text location
 #preferences
-#import userpreferences
+import userpreferences
 
 #Image generating module
 import imagegenerator
@@ -18,10 +18,8 @@ import imagegenerator
 mydatagrabber = datagrabber.Datagrabber("flickr")
 data_list = mydatagrabber.getdata_lists()
  
-#mypreferences = userpreferences.Userpreferences(data_list)
-#user_preferences = mypreferences.getpreferences()
-user_preferences = {"font_size": 48, "font": "random"}
-#user_preferences = {"font_size": 48, "font": "OpenSans-Bold.ttf"}
+mypreferences = userpreferences.Userpreferences()
+user_preferences = mypreferences.getuserpreferences()
 
 myimages = imagegenerator.Imagegenerator(data_list, user_preferences)
 
