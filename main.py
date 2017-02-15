@@ -14,8 +14,19 @@ import userpreferences
 #Image generating module
 import imagegenerator
 
+#sys module provides access to command line args. via sys.argv
+import sys
+
+   
 #Main 
-mydatagrabber = datagrabber.Datagrabber("flickr")
+if len(sys.argv)>1:
+    importsource = sys.argv[1]
+#else:
+#    print("Photo source path required")
+else:
+    importsource = "72157625568426420"
+
+mydatagrabber = datagrabber.Datagrabber(importsource)
 data_list = mydatagrabber.getdata_lists()
  
 mypreferences = userpreferences.Userpreferences()
