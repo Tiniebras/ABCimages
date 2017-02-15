@@ -23,17 +23,18 @@ class Datagrabber():
         return (self.image_list, self.text_list)
     
     def getimages(self,source):
-        #Grab images from flickr
-        if source.lower() == "flickr":
-            self.__flickr()
         #Grab images from path
         if os.path.exists(source):
-            self.__local()
+            self.__local()        
+        #Grab images from flickr
+        else:
+            self.__flickr(source)       
 
-    def __flickr(self):
+    def __flickr(self,source):
+        self.photoset_id = source
         self.params = {
             "method": "flickr.photosets.getPhotos",
-            "photoset_id": "72157625568426420", # Using 'Boats in the Baptistry' for now
+            "photoset_id": self.photoset_id, #"72157625568426420", # Using 'Boats in the Baptistry' for now
             "user_id": "33625733@N03", # ABC's user_id
             "api_key": "f04a132622fbafbbe31e4521cb553193", # Our API key
             "format": "json",
