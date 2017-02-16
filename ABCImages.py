@@ -5,6 +5,9 @@ from appJar import gui
 #Get font list in fonts folder
 import os
 
+#Import main
+import main
+
 # function called by pressing the buttons
 def press(btn):
     with open("userprefs.txt","w") as f:
@@ -15,6 +18,7 @@ def press(btn):
         f.write(font + "\n")
         fontloc = app.getOptionBox("Text Location:")
         f.write(fontloc + "\n")
+    main.main(app.getEntry("source"))
     #print(app.getEntry("source"))   
     app.stop()
 

@@ -19,18 +19,22 @@ import sys
 
    
 #Main 
-if len(sys.argv)>1:
-    importsource = sys.argv[1]
-#else:
-#    print("Photo source path required")
-else:
-    importsource = "72157625568426420"
+def main(source):
+    importsource = source
+        
+    mydatagrabber = datagrabber.Datagrabber(importsource)
+    data_list = mydatagrabber.getdata_lists()
+     
+    mypreferences = userpreferences.Userpreferences()
+    user_preferences = mypreferences.getuserpreferences()
+    
+    myimages = imagegenerator.Imagegenerator(data_list, user_preferences)
 
-mydatagrabber = datagrabber.Datagrabber(importsource)
-data_list = mydatagrabber.getdata_lists()
- 
-mypreferences = userpreferences.Userpreferences()
-user_preferences = mypreferences.getuserpreferences()
-
-myimages = imagegenerator.Imagegenerator(data_list, user_preferences)
+if __name__ == "__main__":
+    if len(sys.argv)>1:
+        main(sys.argv[1:])
+        #else:
+        #    print("Photo source path required")
+    else:
+        main("72157625568426420")
 
