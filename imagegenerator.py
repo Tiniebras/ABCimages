@@ -31,24 +31,22 @@ class Imagegenerator():
         self.d = ImageDraw.Draw(self.text_placeholder)
         self.line = ""
         self.lines = []
-        self.words = self.mytext.split() # Split by whitespace
-        for word in self.words:
-            if len(self.line.split()) == 0:
-                self.line = word
-            else:
-                self.line = "{} {}".format(self.line, word)
-            self.line_width, self.line_height = self.d.textsize(self.line, font = self.font)
-            if self.line_width > self.max_width:
-                # This block was saving the width of the line including the word which pushed it over the limit
-                # Have corrected it to re-calculate the line width after removing the word
-                # But it's v hacky – will come back to it when I have more time
-                last_word = self.line.rsplit(" ", 1)[-1] # Save last word
-                self.line = self.line.rsplit(" ", 1)[0] # Strip it from line
-                self.line_width, self.line_height = self.d.textsize(self.line, font = self.font) # Recalculate line width
-                self.lines.append({"width": self.line_width, "height": self.line_height, "string": self.line})
-                self.line = last_word # Replace line with last word
-        self.line_width, self.line_height = self.d.textsize(self.line, font = self.font) # Recalculate line width
-        self.lines.append({"width": self.line_width, "height": self.line_height, "string": self.line}) # Catch the last line
+        self.words = self.mytext.split()
+        # NB self.word, self.line, self.total_width, self.word_width & self.word_height are all local & don't need to be attributes
+        for self.word in self.words:
+            if len(self.line) > 0: # If there's already a word in line...
+                self.word_width, self.word_height = self.d.textsize(" " + self.word, font = self.font) # Current word's width
+                self.line_width, self.line_height = self.d.textsize(self.line, font = self.font) # Current line's width
+                self.total_width = self.line_width + self.word_width # Total width
+                if self.total_width > self.max_width: # If total width too wide...
+                    self.lines.append({"width": self.line_width, "height": self.line_height, "string": self.line}) # Store the line in self.lines
+                    self.line = self.word # And form new line with current word
+                else: # If total width not too wide...
+                    self.line += " " + self.word # Append current word
+            else: # If line is empty...
+                self.line = self.word # Start it with the current word
+        self.line_width, self.line_height = self.d.textsize(self.line, font = self.font) # Get last line's width
+        self.lines.append({"width": self.line_width, "height": self.line_height, "string": self.line}) # Append last line to lines
 
     def overlayimage(self, image, text):
         self.myimage = image
