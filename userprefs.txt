@@ -1,3 +1,5 @@
 46
-OpenSans-Bold.ttf
-Left
+fonts/OpenSans-Bold.ttf
+Centre
+Middle
+72157625570020766
