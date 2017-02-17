@@ -65,6 +65,9 @@ class Imagegenerator():
             elif self.user_preferences[2] == "Centre":
                 x = (self.max_width - self.line["width"]) / 2
                 y = self.y + (i * self.lines[i-1]["height"])
+            else:
+                x = self.x
+                y = self.y + (i * self.lines[i-1]["height"])
             self.d.text((x, y), self.line["string"], font = self.font, fill = (255,255,255,128)) # To justify right, would set x to original_image.size[0] - line["width"]
 
         self.out = Image.alpha_composite(self.original_image, self.text_placeholder)
