@@ -29,44 +29,35 @@ class Imagegenerator():
         self.text_placeholder = Image.new("RGBA", self.original_image.size, (255,255,255,0))
         self.font = ImageFont.truetype(self.font_file, self.font_size)
         self.d = ImageDraw.Draw(self.text_placeholder)
-        self.line = ""
-        self.lines = []
-        self.words = self.mytext.split()
-        # NB self.word, self.line, self.total_width, self.word_width & self.word_height are all local & don't need to be attributes
-        for self.word in self.words:
-            if len(self.line) > 0: # If there's already a word in line...
-                self.word_width, self.word_height = self.d.textsize(" " + self.word, font = self.font) # Current word's width
-                self.line_width, self.line_height = self.d.textsize(self.line, font = self.font) # Current line's width
-                self.total_width = self.line_width + self.word_width # Total width
-                if self.total_width > self.max_width: # If total width too wide...
-                    self.lines.append({"width": self.line_width, "height": self.line_height, "string": self.line}) # Store the line in self.lines
-                    self.line = self.word # And form new line with current word
+        self.multiline = ""
+        line = ""
+        words = self.mytext.split()
+        for word in words:
+            if len(line) == 0: # If line is empty...
+                line = word # Start it with the current word
+            else: # If there's already a word in line...
+                word_width, word_height = self.d.textsize(" " + word, font = self.font, spacing = 0) # Current word's width
+                line_width, line_height = self.d.textsize(line, font = self.font, spacing = 0) # Current line's width
+                if (line_width + word_width) > self.max_width: # If total width too wide...
+                    self.multiline += line + "\n" # Push line onto multiline and append \n
+                    line = word # And form new line with current word
                 else: # If total width not too wide...
-                    self.line += " " + self.word # Append current word
-            else: # If line is empty...
-                self.line = self.word # Start it with the current word
-        self.line_width, self.line_height = self.d.textsize(self.line, font = self.font) # Get last line's width
-        self.lines.append({"width": self.line_width, "height": self.line_height, "string": self.line}) # Append last line to lines
+                    line += " " + word # Append current word
+        self.multiline += line # Append remaining line fragments
 
     def overlayimage(self, image, text):
         self.myimage = image
         self.mytext = text
         #self.font_size = user_preferences["font_size"]
         self.line_to_paragraph()
-        for i, self.line in enumerate(self.lines):
-            if self.user_preferences[2] == "Left":
-                x = self.x
-                y = self.y + (i * self.lines[i-1]["height"])
-            elif self.user_preferences[2] == "Right":
-                x = self.max_width - self.line["width"]
-                y = self.y + (i * self.lines[i-1]["height"])
-            elif self.user_preferences[2] == "Centre":
-                x = (self.max_width - self.line["width"]) / 2
-                y = self.y + (i * self.lines[i-1]["height"])
-            else:
-                x = self.x
-                y = self.y + (i * self.lines[i-1]["height"])
-            self.d.text((x, y), self.line["string"], font = self.font, fill = (255,255,255,128)) # To justify right, would set x to original_image.size[0] - line["width"]
-
+        x, y = self.x, self.y
+        if self.user_preferences[2] == "Left":
+            self.d.multiline_text((x, y), self.multiline, font = self.font, fill = (255,255,255,128), align = "left")
+        elif self.user_preferences[2] == "Centre":
+            self.d.multiline_text((x, y), self.multiline, font = self.font, fill = (255,255,255,128), align = "center")
+        elif self.user_preferences[2] == "Right":
+            self.d.multiline_text((x, y), self.multiline, font = self.font, fill = (255,255,255,128), align = "right")
+        else:
+            self.d.multiline_text((x, y), self.multiline, font = self.font, fill = (255,255,255,128), align = "left")
         self.out = Image.alpha_composite(self.original_image, self.text_placeholder)
         self.out.save(os.path.join("photos", self.myimage+".edit.jpg"))
