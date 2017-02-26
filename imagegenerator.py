@@ -2,7 +2,7 @@
 # It takes a list of images, a list of text, and a list of user genereated
 # text locations as arguments.
 
-import os, glob, random
+import os, glob, random, datagrabber
 from PIL import Image, ImageDraw, ImageFont # Install Pillow, not PIL
 
 class Imagegenerator():
@@ -10,18 +10,23 @@ class Imagegenerator():
         self.overlayimage_list(data_list, user_preferences)
 
     def overlayimage_list(self, data_list, user_preferences):
-        self.image_list, self.text_list = data_list
+        #self.image_list, self.text_list = data_list
+        #self.image_list, self.text_list = data_list.getdata_lists()
+        
         self.user_preferences = user_preferences
         self.font_file_list = glob.glob(os.path.join("fonts", "*.ttf"))
         random.shuffle(self.font_file_list)
 
-        for i in range(len(self.text_list)):
+        #for i in range(len(self.text_list)):
+        for i in range(data_list.gettextlen()):
             if user_preferences[1].rstrip() == "random":
                 self.font_file = self.font_file_list[i % len(self.font_file_list)]
             else:
                 self.font_file = os.path.join("fonts", user_preferences[1].rstrip())
-            self.overlayimage(self.image_list[i], self.text_list[i])
-     
+            #self.overlayimage(self.image_list[i], self.text_list[i])
+            #self.overlayimage(self.image_list[i], data_list.gettext(i))
+            self.overlayimage(data_list.getimage(i), data_list.gettext(i))
+            
     def line_to_paragraph(self):
         self.font_size = int(self.user_preferences[0])
         self.original_image = Image.open(os.path.join("photos", self.myimage + ".jpg")).convert("RGBA")

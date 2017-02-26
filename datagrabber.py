@@ -16,13 +16,22 @@ class Datagrabber():
         self.image_list = []
         self.text_list = []
         
-        self.getimages(source)
-        self.gettext()
+        self.loadimages(source)
+        self.loadtext()
     
     def getdata_lists(self):
         return (self.image_list, self.text_list)
     
-    def getimages(self,source):
+    def gettext(self,i):
+        return (self.text_list[i])
+    
+    def gettextlen(self):
+        return (len(self.text_list))
+    
+    def getimage(self, i):
+        return (self.image_list[i])
+    
+    def loadimages(self,source):
         #Grab images from path
         if os.path.exists(source):
             self.__local()        
@@ -73,7 +82,7 @@ class Datagrabber():
     def __local(self):
         self.info = "to be done"
         
-    def gettext(self):
+    def loadtext(self):
         try:
             with open("quotes.txt") as self.f:
                 self.text_list = self.text_list + self.f.readlines()

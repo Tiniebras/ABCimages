@@ -41,7 +41,8 @@ def press(btn): # function called by pressing the buttons
 
 app = gui()
 
-font_list = glob.glob(os.path.join("fonts", "*.ttf")) # Only list *.ttf files
+#font_list = glob.glob(os.path.join("fonts", "*.ttf")) # Only list *.ttf files
+font_list = os.listdir("fonts")
 
 app.addLabel("title", "ABCImages User Preferences", 0, 0, 2) # Row 0, Column 0, Span 2
 
