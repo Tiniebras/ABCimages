@@ -25,6 +25,18 @@ class Userpreferences():
     def getuserpreferences(self):
         return self.userpreferences
     
+    def getfontsize(self):
+        return (self.userpreferences[0])
+    
+    def getfontname(self):
+        return (self.userpreferences[1])
+    
+    def gethorizontal(self):
+        return (self.userpreferences[2])
+    
+    def getvertical(self):
+        return (self.userpreferences[3])
+    
     def loaduserpreferences(self):
         try:
             with open("userprefs.txt") as self.f:

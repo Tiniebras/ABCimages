@@ -26,10 +26,11 @@ def main(source):
     #data_list = mydatagrabber.getdata_lists()
      
     mypreferences = userpreferences.Userpreferences()
-    user_preferences = mypreferences.getuserpreferences()
+    #user_preferences = mypreferences.getuserpreferences()
     
     #myimages = imagegenerator.Imagegenerator(data_list, user_preferences)
-    myimages = imagegenerator.Imagegenerator(mydatagrabber, user_preferences)
+    #myimages = imagegenerator.Imagegenerator(mydatagrabber, user_preferences)
+    myimages = imagegenerator.Imagegenerator(mydatagrabber, mypreferences)
     
 if __name__ == "__main__":
     if len(sys.argv)>1:

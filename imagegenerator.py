@@ -12,31 +12,38 @@ class Imagegenerator():
     def overlayimage_list(self, data_list, user_preferences):
         #self.image_list, self.text_list = data_list
         #self.image_list, self.text_list = data_list.getdata_lists()
+             
+        #self.user_preferences = user_preferences
+        self.user_preferences = user_preferences.getuserpreferences()
         
-        self.user_preferences = user_preferences
         self.font_file_list = glob.glob(os.path.join("fonts", "*.ttf"))
         random.shuffle(self.font_file_list)
 
         #for i in range(len(self.text_list)):
         for i in range(data_list.gettextlen()):
-            if user_preferences[1].rstrip() == "random":
+            if self.user_preferences[1].rstrip() == "random":
                 self.font_file = self.font_file_list[i % len(self.font_file_list)]
             else:
-                self.font_file = os.path.join("fonts", user_preferences[1].rstrip())
+                #self.font_file = os.path.join("fonts", self.user_preferences[1].rstrip())
+                self.font_file = os.path.join("fonts", user_preferences.getfontname().rstrip())
             #self.overlayimage(self.image_list[i], self.text_list[i])
             #self.overlayimage(self.image_list[i], data_list.gettext(i))
-            self.overlayimage(data_list.getimage(i), data_list.gettext(i))
+            self.overlayimage(data_list.getimage(i), data_list.gettext(i), user_preferences)
+   
+    def overlayimage(self, image, text, user_preferences):
+        self._line_to_paragraph(image, text, user_preferences)
+        self._applytext(image, text, user_preferences)
             
-    def line_to_paragraph(self):
+    def _line_to_paragraph(self, image, text, user_preferences):
         self.font_size = int(self.user_preferences[0])
-        self.original_image = Image.open(os.path.join("photos", self.myimage + ".jpg")).convert("RGBA")
+        self.original_image = Image.open(os.path.join("photos", image + ".jpg")).convert("RGBA")
         self.x, self.y, self.font_size, self.max_width = 10, 10, self.font_size, self.original_image.size[0] - 20
         self.text_placeholder = Image.new("RGBA", self.original_image.size, (255,255,255,0))
         self.font = ImageFont.truetype(self.font_file, self.font_size)
         self.d = ImageDraw.Draw(self.text_placeholder)
         self.multiline = ""
         line = ""
-        words = self.mytext.split()
+        words = text.split()
         for word in words:
             if len(line) == 0: # If line is empty...
                 line = word # Start it with the current word
@@ -50,19 +57,20 @@ class Imagegenerator():
                     line += " " + word # Append current word
         self.multiline += line # Append remaining line fragments
 
-    def overlayimage(self, image, text):
-        self.myimage = image
-        self.mytext = text
+    #def overlayimage(self, image, text, user_preferences):
+    def _applytext(self, image, text, user_preferences):
+        #self.myimage = image
+        #self.mytext = text
         #self.font_size = user_preferences["font_size"]
-        self.line_to_paragraph()
+        #self.line_to_paragraph(image, text, user_preferences)
         x, y = self.x, self.y
-        if self.user_preferences[2] == "Left":
+        if user_preferences.gethorizontal() == "Left":
             self.d.multiline_text((x, y), self.multiline, font = self.font, fill = (255,255,255,128), align = "left")
-        elif self.user_preferences[2] == "Centre":
+        elif user_preferences.gethorizontal() == "Centre":
             self.d.multiline_text((x, y), self.multiline, font = self.font, fill = (255,255,255,128), align = "center")
-        elif self.user_preferences[2] == "Right":
+        elif user_preferences.gethorizontal() == "Right":
             self.d.multiline_text((x, y), self.multiline, font = self.font, fill = (255,255,255,128), align = "right")
         else:
             self.d.multiline_text((x, y), self.multiline, font = self.font, fill = (255,255,255,128), align = "left")
         self.out = Image.alpha_composite(self.original_image, self.text_placeholder)
-        self.out.save(os.path.join("photos", self.myimage+".edit.jpg"))
+        self.out.save(os.path.join("photos", image+".edit.jpg"))
